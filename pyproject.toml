@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools >= 77.0.3"]
+build-backend = "setuptools.build_meta"
+[project]
+name = "MassMedicaidPy"
+version = "0.0.1"
+authors = [
+{ name="Radiah Khan", email="khantasnim3345@gmail.com" },
+{ name = "Danyi Xu", "dxu@smith.edu"},
+{name = "Xinxin Zhang", "xzhang88@smith.edu"}
+]
+description = "Often it is a hassle to calculate what sort of public health insurance package a user is eligible for given their demographic and conditions. So we created this package to simplify the calculation for users in Massachusetts."
+readme = "README.md"
+requires-python = ">=3.9"
+classifiers = [
+"Programming Language :: Python :: 3",
+"Operating System :: OS Independent",
+]
+license = "MIT"
+license-files = ["LICEN[CS]E*"]
+[project.urls]
+Homepage = "https://github.com/radiah23/MassMedicaidPy"
+Issues = "https://github.com/radiah23/MassMedicaidPy/issues"
