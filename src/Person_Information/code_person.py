@@ -25,6 +25,7 @@ class Person: #it is the entire thing where the other classes are going to inher
         age = (today_date.year - self.birthdate.year- ((today_date.month, today_date.day) < (self.birthdate.month, self.birthdate.day)))
 
         return age
+        
     
     
 class Individual(Person):
