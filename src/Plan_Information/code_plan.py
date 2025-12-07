@@ -48,15 +48,15 @@ class Plan:
             'expansion_adults':  "MassHealth CarePlus"   
    }
 
-    def __init__(self,eligible_categories, family_size, age, annual_income, is_pregnant, is_parent, is_disabled, citizenship):
+    def __init__(self,eligible_categories, family_size, age, annual_income, is_pregnant, is_parent, is_disabled, citizenship_eligibility):
         self.eligible_categories = eligible_categories
         self.family_size = family_size
-        self.monthly_income = annual_income
+        self.annual_income = annual_income
         self.age = age
         self.is_pregnant = is_pregnant
         self.is_parent = is_parent
         self.is_disabled = is_disabled
-        self.citizenship = citizenship
+        self.citizenship_eligibility = citizenship_eligibility
 
     def eligible_plans(self):
         eligible_plans = []
@@ -68,16 +68,30 @@ class Plan:
         if self.is_disabled and "MassHealth CommonHealth" not in eligible_plans:
             eligible_plans.append("MassHealth CommonHealth")
         
-        # If person has immigration restrictions
         if self.citizenship not in ["citizen", "legal_permanent_resident"]:
-            # Add Family Assistance option
             if "MassHealth Family Assistance" not in eligible_plans:
                 eligible_plans.append("MassHealth Family Assistance")
-            
-            # If undocumented, also offer Limited
+    
             if self.immigration_status == "undocumented":
                 if "MassHealth Limited" not in eligible_plans:
                     eligible_plans.append("MassHealth Limited")
         return eligible_plans
     
+    def plan_summary(self):
     
+        # Get all eligible plans
+        all_plans = self.eligible_plans()
+
+        return {
+            "family_size": self.family_size,
+            "annual_income": self.annual_income,
+            "eligible_categories": self.eligible_categories,
+            "age": self.age,
+            "is_disabled": self.is_disabled,
+            "is_pregnant": self.is_pregnant,
+            "is_parent": self.is_parent,
+            "citizenship_eligibility": self.citizenship_eligibility,
+            "eligible_plans": all_plans,
+            "number_of_plans": len(all_plans),
+        }
+ 
