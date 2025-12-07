@@ -1,23 +1,3 @@
-
-
-def regional_belonging(self):
-   if self.state = "Massachusetts":
-       return self.state
-   else:
-       return "You might need to consider federal medicare options or your state options"
-
-
-def citizenship_egilibility(self):
-   if self.citizenship = "US Citizen":
-       return self.citizenship
-   elif self.citizenship = "Permanent Residency"
-       return self.citizenship
-   else:
-       return "Sorry, there are other eligible international insurance options for you."
-
-
-
-
 class MassHealthEligibilityChecker:
    def __init__(self):
        #yearly federal poverty level  - yearly income
@@ -45,6 +25,22 @@ class MassHealthEligibilityChecker:
            'parents': 1.33,          
            'expansion_adults': 1.33  
        }
+    
+    def regional_belonging(self, person):
+       if self.state == "Massachusetts":
+           return self.state
+       else:
+           return "You might need to consider federal medicare options or your state options"
+
+
+    def citizenship_eligibility(self,person):
+        if self.citizenship == "US Citizen":
+            return self.citizenship
+        elif self.citizenship == "Permanent Residency":
+            return self.citizenship
+        else:
+            return "Sorry, there are other eligible international insurance options for you."
+
   
    def calculate_annual_fpl(self, family_size):
        """Calculate the Federal Poverty Level (annual income) for a given family size
@@ -148,8 +144,28 @@ class MassHealthEligibilityChecker:
                results['annual_income_limit'] = limit
       
        return results
-  
-
-
- 
-
+    
+    def check_household_eligibility(self, household: Household) -> dict:
+        """:
+        Check eligibility for all members in a household using household data.
+        return a dictionary with eligibility results for each member.
+        """
+        regional_check = self.regional_belonging(household.individual)
+        if regional_check != "Massachusetts":
+            return {"eligible": False,
+                    "reason":"Household not in Massachusetts",
+                    "message": regional_check}
+        
+        citizenship_check = self.citizenship_eligibility(household.individual)
+        if citizenship_check not in ["US Citizen", "Permanent Residency"]:
+            return {"eligible": False,
+                    "reason":"Household members do not meet citizenship requirements",
+                    "message": citizenship_check}
+        return self.check_eligibility(
+            age=household.individual.calculate_age,
+            annual_income=household.get_income(),
+            family_size=household.household_size,
+            is_pregnant=household.individual.pregnancy_status,
+            is_parent=(len(household.dependents) > 0)
+        )
+   
