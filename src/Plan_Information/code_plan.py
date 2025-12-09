@@ -65,15 +65,16 @@ class Plan:
                 plan = self.category_to_plans[category]
                 if plan not in eligible_plans:
                     eligible_plans.append(plan)
+
         if self.is_disabled and "MassHealth CommonHealth" not in eligible_plans:
             eligible_plans.append("MassHealth CommonHealth")
         
-        if self.citizenship not in ["citizen", "legal_permanent_resident"]:
+        if self.citizenship not in ["US Citizen", "Permanent Residency"]:#Had to fix here to relate with MassHealthEligibility checker
             if "MassHealth Family Assistance" not in eligible_plans:
                 eligible_plans.append("MassHealth Family Assistance")
-    
-            if self.immigration_status == "undocumented":
-                if "MassHealth Limited" not in eligible_plans:
+    #Removed the immigration status variable because we arent taking that into account
+
+            if "MassHealth Limited" not in eligible_plans:
                     eligible_plans.append("MassHealth Limited")
         return eligible_plans
     
