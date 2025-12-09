@@ -1,168 +1,205 @@
 from datetime import datetime,date
-from pydantic import BaseModel, PositiveFloat, ValidationError, Field, computed_field, PositiveInt
-from typing import List 
+#Citation : 
+#Used Claude to plan the classes structures'
+#The prompts that I used was :"Given this final project proposal, help us build a skeleton structure of methods that we planned to plan the structure better without explicitly giving the code"
+from datetime import datetime
 
-class Person(BaseModel): #it is the entire thing where the other classes are going to inherit 
-    #Assuming citizenship is same
-    # Plan : 
-    # Household is the parent class 
-    # Individual and dependent is going to inherit this household classs o it needs to have everything the parent class has 
-    #Assuming it is medicaid always
-    # disability_status, pregnant_member, gender,age, --> Individual
-    #Seperate class for income_bracket
+class Person:
+    def __init__(self, gender, citizenship, birthdate, state):
+        gender_options = ["Male", "Female", "Prefer not to Disclose"]
     
-    gender : str
-    citizenship : str
-    birthdate : date 
-    state: str
-    
-    @computed_field 
-    @property
-    
-    def calculate_age(self) -> PositiveInt:
-        '''
-        this function is going to compute the proper age with the today's date. 
-        '''
+       
+        #Error messages
+        try:
+            if not isinstance(gender, str):
+                raise TypeError("gender must be a string")
+            if gender not in gender_options:
+                raise ValueError("Gender must be one of: Male, Female, Prefer not to Disclose")
 
-        today_date = date.today()
-        age = (today_date.year - self.birthdate.year- ((today_date.month, today_date.day) < (self.birthdate.month, self.birthdate.day)))
+            if not isinstance(citizenship, str):
+                raise TypeError("citizenship must be a string")
+        
 
+            if not isinstance(birthdate, str):
+                raise TypeError("birthdate must be a string")
+            try:
+                datetime.strptime(birthdate, "%Y-%m-%d")
+            except ValueError:
+                raise ValueError("birthdate must be in valid 'YYYY-MM-DD' format")
+
+            if not isinstance(state, str):
+                raise TypeError("state must be a string")
+           
+            self.gender = gender
+            self.citizenship = citizenship
+            self.birthdate = birthdate
+            self.state = state
+
+        except Exception as e:
+            raise e 
+
+    #Calculating the age of the Person class
+    def calculate_age(self) -> int:
+        date_today = date.today()
+        if isinstance(self.birthdate, str):#If they input it as a string it needs to be formatted in a way that is understood by the datetime object so it is typecasting
+            birthdate_input = datetime.strptime(self.birthdate, "%Y-%m-%d").date()
+        else:
+            birthdate_input = self.birthdate
+
+        age = date_today.year - birthdate_input.year - (
+            (date_today.month, date_today.day) < (birthdate_input.month, birthdate_input.day)
+        )
+        if not isinstance(age, int):
+            raise TypeError("Age must be in integer")
+        if age < 0 : 
+            raise ValueError("Age cannot be negetive")
         return age
 
 
-    @computed_field
-    @property
+    #Is the person under 18?
     def is_child_acc_to_mass(self) -> bool:
-        return self.age < 19
-    
-    @computed_field
-    @property
+        return self.age < 19 
+   #Is the person a senior?
     def is_senior_acc_to_mass(self) -> bool:
         return self.age >= 65
-    
-    @computed_field
-    @property
+    #Is the person an adult?
     def is_adult(self) -> bool:
         return 19 <= self.age < 65
     
     
 class Individual(Person):
-    disability_status : bool
-    pregnancy_status : bool 
-    is_working : bool 
-    has_hiv = bool 
+    #Really complicated so we assume it is the primary takecare
+    def __init__(self,gender,citizenship,birthdate,state,disability_status: bool, pregnancy_status: bool,has_hiv: bool,is_primary_takecare:bool = True):
+        super().__init__(gender, citizenship, birthdate, state)#Inherits from the Person Class
+        #Ask about how to specify boolean in a class
+        if not isinstance(disability_status, bool):
+            raise TypeError("Disabiity Status must be true or false")
+        if not isinstance(pregnancy_status, bool):
+            raise TypeError("pregnancy_status must be true or false")
+        if not isinstance(has_hiv, bool):
+            raise TypeError("has_hiv must be true or false")
+        if not isinstance(is_primary_takecare, bool):
+            raise TypeError("Primary Takecare Status must be true or false")
+        
+        self.disability_status = disability_status
+        self.pregnancy_status = pregnancy_status
+        self.has_hiv = has_hiv
+        self.is_primary_takecare = is_primary_takecare
+        self.household = None 
+        #Bit difficult to understand but here is the logic:
+        #I want it to nest it to a Household object
+        #Initially I want it to see that there is no Household YETTT! person.household == None
+        #I want it to be stored within a household because that will essentially work in the main method (perchance)
 
-    @computed_field
-    @property 
+#To check if the individual has any special status
     def has_special_status(self):
-     if self.disability_status == True or self.pregnancy_status or self.has_hiv :
-        return "The person has a special status"
-        
-#How do we loop it to go there if they have dependent 
-#Do we put user inputs there 
-# Do not need a main
-#for the error message : check inside the classes 
-#Unit test : with the correct code it works 
-
-class Dependent(Person): 
-   relationship : str 
-
-class Household(BaseModel):
-    individual : Individual #[The primary person]
-    dependents : list[Dependent] #lists dependent object 
-    total_income : PositiveFloat
-#Functions we need : counter on how many dependents?
-    @computed_field
-    @property
-
-    def household_size(self) -> int:
-        return 1 + len(self.dependents)
-
-    @computed_field
-    @property
-    #checks if the individual is a kid
-    def has_children(self) -> bool:
-        if self.individual.is_child_acc_to_mass:
-            return True
-    
-    @computed_field
-    @property
-    #checks if the individual is a senior
-    def has_seniors(self) -> bool:
-        if self.individual.is_senior_acc_to_mass:
-            return True
-    
-    @computed_field
-    @property
-     #checks if the individual is disabled
-    def has_disabled_member(self) -> bool:
-        if self.individual.disability_status:
-            return True
-
-    @computed_field
-    @property
-     #checks if the individual is pregnant
-    def has_pregnancy(self) -> bool:
-        if self.has_pregnancy: 
-            return True
-    
+     if self.disability_status or self.pregnancy_status or self.has_hiv :
+        return "The person is disabled/pregnant/has HIV"
+#ask how to work this in dependent class as well/Disability??
+#Assuming that spouse is included in the package 
+class Dependent(Person):
+    def __init__(self, gender, citizenship, birthdate, state, relationship_to_the_applicant: str):
+        super().__init__(gender, citizenship, birthdate, state)
+        relationship_to_the_applicant_options = ["Spouse", "Child", "Adult-Related-Dependent"]
+        if not isinstance(relationship_to_the_applicant, str):
+            raise TypeError("relationship_to_the_applicant must be a string")
+        if relationship_to_the_applicant not in relationship_to_the_applicant_options:
+            raise ValueError("Invalid dependent relationship type, Choose Betweeen this list :(Spouse, Child, Adult-Related-Dependent) ")
+        self.relationship_to_the_applicant = relationship_to_the_applicant
+        self.household = None
+        #Same logic as before
 
 
-    @computed_field
-    @property
-     #checks if the individual has hiv 
-    def has_pregnancy(self) -> bool:
-        if self.has_hiv: 
-            return True
 
-
-#Problem is idk how to count if the individual is under 18 
-#If an indivual is under 18, they can not be subscriber as someone who will also have dependent 
-    def add_dependent(self, newDependent: Dependent): 
-        self.dependents.append(newDependent)
-    def __len__(self): 
-        return self.household_size
-    #How many people under 18
-    def get_children(self) -> int : 
-        children = []
-        for dep in self.dependents:
-            if dep.is_child_acc_to_mass:
-                children.append(dep)
-        return len(children)
-
-    
-    def get_adults(self) -> int:
-        adults = []
-        if self.individual.is_adult:
-            adults.append(self.individual)
-        for dep in self.dependents:
-            if dep.is_adult:
-                adults.append(dep)
-        return len(adults)
-
-
-        
-    def get_seniors(self) -> int:
-        seniors = []
-        if self.individual.is_senior_acc_to_mass:
-            seniors.append(self.individual)
-        for dep in self.dependents:
-            if dep.is_senior_acc_to_mass:
-                seniors.append(dep)
-
-        return len(seniors)
-
-    
-    def get_special(self) -> int:
-        special_status = []
-        if self.individual.has_special_status:
-            special_status.append(self.individual)
-        for dep in self.dependents:
-            if dep.has_special_status:
-                special_status.append(dep)
-
-        return len(special_status)
-
-    def get_income(self) -> int : 
+class Household:
+    def __init__(self, primary_applicant: Individual, dependent_list: list[Dependent], total_income: float):
+        if primary_applicant.is_child_acc_to_mass():#for reducing the complexity to be fair #Ask again
+            raise ValueError("Primary applicant cannot be > 18")
+        self.primary_applicant = primary_applicant
+        self.dependent_list = dependent_list
+        self.total_income = total_income
+#Getters
+    def get_income(self) -> float:
         return self.total_income
 
+    def household_size(self) -> int:
+        return 1 + len(self.dependent_list)
+
+    def dependent_count(self) -> int:
+        return len(self.dependent_list)
+#Method : Adding Dependents
+    def add_dependent(self, newDependent: Dependent):
+        if self.primary_applicant.is_child_acc_to_mass():
+            raise ValueError("An individual under 18 cannot be a primary applicant with dependents")
+        self.dependent_list.append(newDependent)
+#Len method for calculating the household size
+    def __len__(self):
+        return self.household_size()
+#Returns how many kids are there
+    def get_children(self) -> int:
+        children = []
+        for dep in self.dependent_list:
+            if dep.is_child_acc_to_mass():
+                children.append(dep)
+        return len(children)
+#Checks if the applicant is a parent (Ask if I need to specify Indvidual)
+    def check_parent(self) -> bool:
+        return self.get_children() > 0
+#Adults in the household
+    def get_adults(self) -> int:
+        adults = []
+
+        if self.primary_applicant.is_adult():
+            adults.append(self.primary_applicant)
+        for dep in self.dependent_list:
+            if dep.is_adult():
+                adults.append(dep)
+        return len(adults)
+    def get_seniors(self) -> int:
+        seniors = []
+        if self.primary_applicant.is_senior_acc_to_mass():
+            seniors.append(self.primary_applicant)
+
+        for dep in self.dependent_list:
+            if dep.is_senior_acc_to_mass():
+                seniors.append(dep)
+        return len(seniors)
+    def get_special(self) -> int:
+        special_status = []
+        if self.primary_applicant.has_special_status():
+            special_status.append(self.primary_applicant)
+        for dep in self.dependent_list:
+            if dep.has_special_status():
+                special_status.append(dep)
+        return len(special_status)
+    def has_seniors(self) -> bool:
+        if self.primary_applicant.is_senior_acc_to_mass():
+            return True
+        for dep in self.dependent_list:
+            if dep.is_senior_acc_to_mass():
+                return True
+        return False
+
+    def has_disabled_member(self) -> bool:
+        if self.primary_applicant.disability_status:
+            return True
+        for dep in self.dependent_list:
+            if dep.disability_status:
+                return True
+        return False
+
+    def has_pregnancy(self) -> bool:
+        if self.primary_applicant.pregnancy_status:
+            return True
+        for dep in self.dependent_list:
+            if dep.pregnancy_status:
+                return True
+        return False
+
+    def has_hiv_member(self) -> bool:
+        if self.primary_applicant.has_hiv:
+            return True
+        for dep in self.dependent_list:
+            if dep.has_hiv:
+                return True
+        return False

@@ -26,14 +26,14 @@ class MassHealthEligibilityChecker:
            'expansion_adults': 1.33  
        }
     
-    def regional_belonging(self, person):
+   def regional_belonging(self, person):
        if self.state == "Massachusetts":
            return self.state
        else:
            return "You might need to consider federal medicare options or your state options"
 
 
-    def citizenship_eligibility(self,person):
+   def citizenship_eligibility(self,person):
         if self.citizenship == "US Citizen":
             return self.citizenship
         elif self.citizenship == "Permanent Residency":
@@ -145,7 +145,7 @@ class MassHealthEligibilityChecker:
       
        return results
     
-    def check_household_eligibility(self, household: Household) -> dict:
+   def check_household_eligibility(self, household: Household) -> dict:
         """:
         Check eligibility for all members in a household using household data.
         return a dictionary with eligibility results for each member.
