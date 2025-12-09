@@ -60,7 +60,7 @@ class Individual(Person):
         state,
         disability_status: bool,
         pregnancy_status: bool,
-
+#Include it in the documentation 
         is_primary_caretaker: bool = True
     ):
         super().__init__(gender, citizenship, birthdate, state)
@@ -160,6 +160,7 @@ class Household:
             if dep.is_senior_acc_to_mass():
                 return True
         return False
+    
     def has_disabled_member(self) -> bool:
         if self.primary_applicant.disability_status:
             return True
@@ -179,28 +180,30 @@ class Household:
 #Problems :
 #The other files does not count for disability/special status --> should we remove it then for simplicity
 #And if we do it anyways because we do have a method that checks pregnancy for example in all household using has_pregnancy
-    # def get_eligibility_and_plans(self):
-    #     from Condition_Information.code_condition import MassHealthEligibilityChecker
-    #     from Plan_Information.code_plan import Plan
+    def get_eligibility_and_plans(self):
+        #If we want to put it outside then import all, then all of the self will be replaced , household_infos 
+        from Condition_Information.code_condition import MassHealthEligibilityChecker
+        from Plan_Information.code_plan import Plan
 
-    #     checker = MassHealthEligibilityChecker()
-    #     eligibility = checker.check_household_eligibility(self)
+        checker = MassHealthEligibilityChecker()
+        eligibility = checker.check_household_eligibility(self)
 
-    #     plan_checker = Plan(
-    #         program=eligibility.get("program"),
-    #         family_size=self.household_size(),
-    #         age=self.primary_applicant.calculate_age(),
-    #         annual_income=self.get_income(),
-    #         is_pregnant=self.has_pregnancy(),               
-    #         is_parent=self.is_parent(),
-    #         is_disabled=self.has_disabled_member(),        
-    #         citizenship_eligibility=self.primary_applicant.citizenship
-    #     )
 
-    #     return {
-    #         "eligible": eligibility.get("eligible"),
-    #         "eligible_plans": plan_checker.eligible_plans()
-    #     }
+        plan_checker = Plan(
+            program=eligibility.get("program"),
+            family_size=self.household_size(),
+            age=self.primary_applicant.calculate_age(),
+            annual_income=self.get_income(),
+            is_pregnant=self.has_pregnancy(),               
+            is_parent=self.is_parent(),
+            is_disabled=self.has_disabled_member(),        
+            citizenship_eligibility=self.primary_applicant.citizenship
+        )
+
+        return {
+            "eligible": eligibility.get("eligible"),
+            "eligible_plans": plan_checker.eligible_plans()
+        }
 
 #Errors and how i handled it : 
 # Citation of sources used : Stack OverFlow, Claude, ChatGPT

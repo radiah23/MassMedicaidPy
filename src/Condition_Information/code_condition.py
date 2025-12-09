@@ -1,4 +1,3 @@
-
 from Household_Information.code_household import Person, Individual, Household
 class MassHealthEligibilityChecker:
    def __init__(self):

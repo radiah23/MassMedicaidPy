@@ -75,6 +75,7 @@ class Plan:
 
     def eligible_plans(self):
         eligible_plans = []
+        
         category = self.program_to_category.get(self.program) #This is a realky crucial line because we want it to go to the Program_To_Category  --> get the value of the key which is the program name (not the plan yet)
         if category in self.category_to_plans: #(now if that category exists in the insurance plans it will give us the value of that from the category_to_plans which is again works like a key-value)
             #One confusion was to see why didnt we use.get() as well in the self.category_to_plans but used it in previous one
