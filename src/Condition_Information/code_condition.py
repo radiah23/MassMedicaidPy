@@ -27,14 +27,14 @@ class MassHealthEligibilityChecker:
            'expansion_adults': 1.33  
        }
 #Here it was saying self but it should access person. bevause it is accessing the person objects 
-    def regional_belonging(self, person:Person):#Person object
+   def regional_belonging(self, person:Person):#Person object
        if person.state == "Massachusetts":
            return person.state
        else:
            return "You might need to consider federal medicare options or your state options"
 
 
-    def citizenship_eligibility(self,person):
+   def citizenship_eligibility(self,person):
         if person.citizenship == "US Citizen":
             return person.citizenship
         elif person.citizenship == "Permanent Residency":
@@ -146,7 +146,7 @@ class MassHealthEligibilityChecker:
       
        return results
     
-    def check_household_eligibility(self, household: Household) -> dict:
+   def check_household_eligibility(self, household: Household) -> dict:
         """:
         Check eligibility for all members in a household using household data.
         return a dictionary with eligibility results for each member.
