@@ -162,17 +162,10 @@ class MassHealthEligibilityChecker:
             return {"eligible": False,
                     "reason":"Household members do not meet citizenship requirements",
                     "message": citizenship_check}
-        return self.check_eligibility(
-            age=household.primary_applicant.calculate_age(),
-            annual_income=household.get_income(),
-            family_size=household.household_size(),
-            # is_pregnant=household.primary_applicant.pregnancy_status
-            is_pregnant=household.has_pregnancy(), #instead of checking individual it checks the entire household?
-            is_parent= household.is_parent()
-        )
+        
+        return {"eligible": True}
    
 #Fixes: connected th classes in a way that it doesnt duplicated
 #specifically in the return function 
 #Fixed the is_parent with() by calling the method DIRECTLYYYY
-
 
