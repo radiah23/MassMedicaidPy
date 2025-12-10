@@ -67,7 +67,7 @@ def get_household_eligibility(primary_applicant, dependent_list, total_income):
             "members": []
         }
     }
-    # First, check the initial eligibilty of the entire household
+    # First, check the basic eligibilty of the entire household
     # which is that primary applicant has to meet the residency and citizenship criterias
     household_validation = checker.check_household_eligibility(household)
     # If not, we will return not eligible and the reason
@@ -276,9 +276,6 @@ total_income = 40000
 
 result_test3 = get_household_eligibility(individual_data, dependents_data, total_income)
 print_all(result_test3)
-
-
-# Returns value error
 
 # Test 4, relatively high income family with two kids
 individual_data = {
