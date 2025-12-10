@@ -1,6 +1,6 @@
 from Household_Information.code_household import Person, Individual, Household
 class MassHealthEligibilityChecker:
-   def __init__(self):
+    def __init__(self):
        #yearly federal poverty level  - yearly income
        self.annual_fpl = {
            1: 15660,  
@@ -43,7 +43,7 @@ class MassHealthEligibilityChecker:
             return "Sorry, there are other eligible international insurance options for you."
 
   
-   def calculate_annual_fpl(self, family_size):
+    def calculate_annual_fpl(self, family_size):
        """Calculate the Federal Poverty Level (annual income) for a given family size
            and return the annual FPL amount."""
        if family_size <= 0:
@@ -54,7 +54,7 @@ class MassHealthEligibilityChecker:
        else:
            return self.annual_fpl[8] + (family_size - 8) * self.additional_person_annual
   
-   def get_annual_income_limit(self, category, family_size):
+    def get_annual_income_limit(self, category, family_size):
        """Get the annual income limit for a specific category
            and return the limit amount."""
        percentage = self.eligibility_standards.get(category)
@@ -64,7 +64,7 @@ class MassHealthEligibilityChecker:
        fpl = self.calculate_annual_fpl(family_size)
        return fpl * percentage
   
-   def check_eligibility(self, age, annual_income, family_size,
+    def check_eligibility(self, age, annual_income, family_size,
                         is_pregnant=False, is_parent=False):
        """
        evaluate eligibility for MassHealth programs based on provided criteria.
