@@ -1,25 +1,6 @@
-
-
-def regional_belonging(self):
-   if self.state = "Massachusetts":
-       return self.state
-   else:
-       return "You might need to consider federal medicare options or your state options"
-
-
-def citizenship_egilibility(self):
-   if self.citizenship = "US Citizen":
-       return self.citizenship
-   elif self.citizenship = "Permanent Residency"
-       return self.citizenship
-   else:
-       return "Sorry, there are other eligible international insurance options for you."
-
-
-
-
+from Household_Information.code_household import Person, Individual, Household
 class MassHealthEligibilityChecker:
-   def __init__(self):
+    def __init__(self):
        #yearly federal poverty level  - yearly income
        self.annual_fpl = {
            1: 15660,  
@@ -45,29 +26,45 @@ class MassHealthEligibilityChecker:
            'parents': 1.33,          
            'expansion_adults': 1.33  
        }
+#Here it was saying self but it should access person. bevause it is accessing the person objects 
+    def regional_belonging(self, person:Person):#Person object
+       if person.state == "Massachusetts":
+           return person.state
+       else:
+           return "You might need to consider federal medicare options or your state options"
+
+
+    def citizenship_eligibility(self,person):
+        if person.citizenship == "US Citizen":
+            return person.citizenship
+        elif person.citizenship == "Permanent Residency":
+            return person.citizenship
+        else:
+            return "Sorry, there are other eligible international insurance options for you."
+
   
-   def calculate_annual_fpl(self, family_size):
+    def calculate_annual_fpl(self, family_size):
        """Calculate the Federal Poverty Level (annual income) for a given family size
            and return the annual FPL amount."""
        if family_size <= 0:
-           return 0 #should I return zero here or raise an error?????
+           return ValueError #Fixed here because I think it should be atleast 1 person who is applying - Radiah
       
        if family_size <= 8:
            return self.annual_fpl[family_size]
        else:
            return self.annual_fpl[8] + (family_size - 8) * self.additional_person_annual
   
-   def get_annual_income_limit(self, category, family_size):
+    def get_annual_income_limit(self, category, family_size):
        """Get the annual income limit for a specific category
            and return the limit amount."""
        percentage = self.eligibility_standards.get(category)
        if percentage is None:
-           return None #invalid ???? or return as error ???????
+           return ValueError #invalid ???? or return as error ??????? #But ask again
       
        fpl = self.calculate_annual_fpl(family_size)
        return fpl * percentage
   
-   def check_eligibility(self, age, annual_income, family_size,
+    def check_eligibility(self, age, annual_income, family_size,
                         is_pregnant=False, is_parent=False):
        """
        evaluate eligibility for MassHealth programs based on provided criteria.
@@ -148,8 +145,27 @@ class MassHealthEligibilityChecker:
                results['annual_income_limit'] = limit
       
        return results
-  
-
-
- 
+    
+    def check_household_eligibility(self, household: Household) -> dict:
+        """:
+        Check eligibility for all members in a household using household data.
+        return a dictionary with eligibility results for each member.
+        """
+        regional_check = self.regional_belonging(household.primary_applicant)
+        if regional_check != "Massachusetts":
+            return {"eligible": False,
+                    "reason":"Household not in Massachusetts",
+                    "message": regional_check}
+        
+        citizenship_check = self.citizenship_eligibility(household.primary_applicant)
+        if citizenship_check not in ["US Citizen", "Permanent Residency"]:
+            return {"eligible": False,
+                    "reason":"Household members do not meet citizenship requirements",
+                    "message": citizenship_check}
+        
+        return {"eligible": True}
+   
+#Fixes: connected th classes in a way that it doesnt duplicated
+#specifically in the return function 
+#Fixed the is_parent with() by calling the method DIRECTLYYYY
 
