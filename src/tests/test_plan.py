@@ -20,27 +20,8 @@ def test_plan_creation_none():
     # Test creating plan with None 
     plan = Plan(None)
     assert plan is not None
-    assert not plan.is_eligible()
+    assert plan.get_plan() is None
 
-
-def test_invalid_program_raises_error():
-    # Test that invalid program raises ValueError
-    try:
-        Plan("Medicaid Program")
-        assert False, "Should have raised ValueError"
-    except ValueError:
-        pass
-
-def test_is_eligible_true():
-    # Test is_eligible() returns True for valid program
-    plan = Plan("Medicaid for Pregnant Women")
-    assert plan.is_eligible() == True
-
-
-def test_is_eligible_false():
-    # Test is_eligible() returns False for None
-    plan = Plan(None)
-    assert plan.is_eligible() == False
 
 """
 Test get_plan
@@ -93,20 +74,40 @@ def test_get_coverage():
     assert isinstance(coverage, list)
     assert len(coverage) > 0
 
+def test_has_premium():
+    # Test has_premium
+    plan = Plan("Medicaid for Preganant Women")
+    assert plan.has_premium() == False
+    plan2 = Plan("Medicaid Expansion for Adults")
+    assert plan2.has_premium() == True
 
-def test_get_premium():
-    # Test get_premium returns string
+def test_has_deductible():
+    # Test has_deductible
     plan = Plan("Medicaid for Pregnant Women")
-    premium = plan.get_premium()
-    assert isinstance(premium, str)
-    assert len(premium) > 0
+    assert plan.has_deductible() == False
+
+def test_get_summary():
+    # Test get_summary returns complete plan info
+    plan = Plan("Medicaid for Pregnant Women")
+    summary = plan.get_summary()
+    assert summary["eligible"] == True
+    assert summary["plan"] == "MassHealth Standard"
+    assert "coverage" in summary
+    assert "premium" in summary
+    assert "copay" in summary
 
 
+def test_get_summary_not_eligible():
+    plan = Plan(None)
+    summary = plan.get_summary()
+    
+    assert summary["eligible"] == False
+    assert summary["plan"] is None
 """
 Test all work
 """
 
-def test_all_programs_valid():
+def test_all_programs_works():
     # Test all valid programs work
     programs = [
         "Children's Medicaid (0-1)",
@@ -120,8 +121,8 @@ def test_all_programs_valid():
     
     for program in programs:
         plan = Plan(program)
-        assert plan.is_eligible()
         assert plan.get_plan() is not None
         assert plan.get_plan_details() is not None
+        assert plan.get_coverage() is not None
 
 
