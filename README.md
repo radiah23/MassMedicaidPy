@@ -9,9 +9,15 @@ Determining eligibility for public health insurance is often confusing, time-con
 ## Intended Users
 Low-income individuals and families in Massachusetts seeking to understand their Medicaid eligibility.
 
-## Package Installation 
-install it directly within the pip:
-Code: pip install MassMedicaidPy
+## Package Installation
+
+git clone https://github.com/radiah23/MassMedicaidPy.git
+
+cd /path_to_your_repo
+
+pip install .
+
+
 
 ## Package structure
 1. Household Information Module
