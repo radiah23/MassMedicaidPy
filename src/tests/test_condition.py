@@ -2,12 +2,10 @@ import sys
 import os
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'MassMedicaidPy')))
-
+from Condition_Information.code_condition import MassHealthEligibilityChecker
+from Household_Information.code_household import Person, Household
+from datetime import date
 def test_medicaid():
-    from Condition_Information.code_condition import MassHealthEligibilityChecker
-    from Household_Information.code_household import Person, Household
-    from datetime import date
 
     checker = MassHealthEligibilityChecker()
 
