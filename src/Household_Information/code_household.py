@@ -1,3 +1,6 @@
+# Added for import issues
+from __future__ import annotations
+from typing import List
 from datetime import datetime, date
 #Citation : 
 #Used Claude to plan the classes structures'

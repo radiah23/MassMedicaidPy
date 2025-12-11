@@ -289,9 +289,6 @@ total_income = 40000
 result_test3 = get_household_eligibility(individual_data, dependents_data, total_income)
 print_all(result_test3)
 
-
-# Returns value error
-
 # Test 4, relatively high income family with two kids
 individual_data = {
     "gender": "Female",
