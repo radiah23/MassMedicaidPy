@@ -3,10 +3,28 @@ from typing import List
 
 class Plan:
    
-    """ 
-    Plan class maps eligibility programs to MassHealth plans 
-    and provides detailed plan information.
-"""
+    """
+    
+    ------------------------------------------------------------------------------------------------------------------------------------------
+        Attributes:
+
+        program                 Dictionary
+                                The program people are assigned based on their age, pregnancy status, and income
+   ----------------------------------------------------------------------------------------------------------------------------------------------
+    Methods : 
+        get_plan(self)             Dictionary
+                                   Returns plan based on the person's program
+                                   
+        get_plan_details(self)     Dictionary
+                                   Returns Dictionary containing details
+        
+        get_coverage(self)         List 
+                                   Returns a list of coverage
+        
+        has_premium(self)                  Boolean 
+                                        Checks if the person is over 18 and under 65 and returns true if the person is and false otherwise
+    --------------------------------------------------------------------------------------------------------------------------------------------------
+ """    
    
     # first match programs defined in condition class to plans
     program_to_plans = {
