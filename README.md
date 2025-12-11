@@ -43,18 +43,14 @@ pip install .
 - Relationship types for dependents are limited to "Spouse", "Child", or "Adult-Related-Dependent" and it does not account for any other relationship. Throws an error if you try to input any other types.
 - The package assumes standard MassHealth program categories and does not account for special circumstances or waiver programs
 - Does not provide enrollment assistance or next steps after determining eligibility
+- Gender must be one of the options :  [Male, Female, Prefer not to Disclose] for the sake of the project scope
 
 ### 1. Household Information Module
 Defines the main user-facing classes.
 
 **Person**
 
-Base class containing:
-- Gender
-- Citizenship
-- Birthdate
-- State
-- Age-calculation and demographic helper methods
+Base class contains : `Gender`, `Citizenship`, `Birthdate` `State`
 
 **Individual (Subclass of Person)**
 
