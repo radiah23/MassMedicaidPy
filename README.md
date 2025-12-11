@@ -37,8 +37,12 @@ pip install .
 - The dependents of the user live in the same household as the user using this package
 - The dependents of the user have the same citizenship, state as the user
 - Total income must be calculated and provided as total annual household income (users must calculate this themselves)
+- Total yearly income must be in USD 
 - The user is assumed to be the primary caretaker when dependents are present
-- Federal Poverty Level (FPL) data is based on the 2024 guidelines so the threshold might change annually 
+- Federal Poverty Level (FPL) data is based on the 2024 guidelines so the threshold might change annually
+- Relationship types for dependents are limited to "Spouse", "Child", or "Adult-Related-Dependent" and it does not account for any other relationship. Throws an error if you try to input any other types.
+- The package assumes standard MassHealth program categories and does not account for special circumstances or waiver programs
+- Does not provide enrollment assistance or next steps after determining eligibility
 
 ### 1. Household Information Module
 Defines the main user-facing classes.
