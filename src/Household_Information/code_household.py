@@ -87,6 +87,15 @@ class Person:
         age = date_today.year - birthdate_input.year - (
             (date_today.month, date_today.day) < (birthdate_input.month, birthdate_input.day)
         )
+
+        if birthdate_input > date_today:
+            raise ValueError("Birthdate cannot be in the future")
+    
+        age = date_today.year - birthdate_input.year - (
+        (date_today.month, date_today.day) < (birthdate_input.month, birthdate_input.day)
+    )
+    
+        return age
      
         
        
@@ -435,12 +444,7 @@ class Household:
         >>> house2.has_seniors()
         True
         """
-        if self.primary_applicant.is_senior_acc_to_mass():
-            return True
-        for dep in self.dependent_list:
-            if dep.is_senior_acc_to_mass():
-                return True
-        return False
+        return self.get_seniors() > 0
 
 #Checks if the household has disabled members 
 
