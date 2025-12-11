@@ -14,7 +14,7 @@ Low-income individuals and families in Massachusetts seeking to understand their
 git clone https://github.com/radiah23/MassMedicaidPy.git
 
 #### 2. Navigate into the project directory
-cd MassMedicaidPy
+cd /path/to/repo
 
 #### 3. Install the package locally
 pip install .
