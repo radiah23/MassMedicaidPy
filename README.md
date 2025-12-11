@@ -34,7 +34,7 @@ pip install .
 - The user using this is an adult according to Massachussetts otherwise it does not process the results
 - The dependents can be of any age 
 - The age of the user and their dependents have is the year (not calculating for months and days)
-- The dependents of the user live in the same household as the user using this package
+- The dependents of the user needs to live in the same household as the user using this package, error in results otherwise.
 - The dependents of the user have the same citizenship, state as the user
 - Total income must be calculated and provided as total annual household income (users must calculate this themselves)
 - Total yearly income must be in USD 
