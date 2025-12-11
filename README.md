@@ -1,5 +1,4 @@
 # MassMedicaidPy
-
 ## Description 
 MassMedicaidPy is a Python package that calculates Medicaid eligibility and possible health insurance plans for residents of Massachusetts. It evaluates demographic information, family structure, income, pregnancy status, disability, and other factors to determine the user's eligibility for various MassHealth programs.
 
@@ -26,6 +25,15 @@ cd /path/to/repo
 pip install .
 ```
 
+
+## Dependencies of the Package 
+
+This package requires:
+- Python >= 3.9 version
+- No external dependencies are needed (We use the standard library of python) 
+All required modules (`datetime`, `typing`) are included in Python's standard library.
+
+
 ## Package Structure
 
 ### Assumptions
@@ -43,7 +51,7 @@ pip install .
 - Relationship types for dependents are limited to "Spouse", "Child", or "Adult-Related-Dependent" and it does not account for any other relationship. Throws an error if you try to input any other types.
 - The package assumes standard MassHealth program categories and does not account for special circumstances or waiver programs
 - Does not provide enrollment assistance or next steps after determining eligibility
-- Gender must be one of the options :  [Male, Female, Prefer not to Disclose] for the sake of the project scope
+- Gender must be one of the options :  [Male, Female, Prefer not to Disclose] for the sake of the project scope. 
 
 ### 1. Household Information Module
 Defines the main user-facing classes.
@@ -113,3 +121,72 @@ Provides:
 - Coverage details
 - Copay, premium, and deductible information
 - `get_summary()` method for a full plan overview
+
+
+## Example Usage
+
+After you are done installing it: 
+
+```python
+from MassMedicaidPy.Household_Information.code_household import Individual,Person,Household
+from MassMedicaidPy.Plan_Information.code_plan import Plan
+from MassMedicaidPy.Condition_Information.code_condition import MassHealthEligibilityChecker
+from MassMedicaidPy.results_info.results import get_household_eligibility, print_all
+
+# Define the user (Primary Applicant)
+individual_data = {
+    "gender": "Female",
+    "citizenship": "US Citizen",
+    "birthdate": "1995-06-10",
+    "state": "Massachusetts",
+    "disability_status": False,
+    "pregnancy_status": True,
+    "is_primary_caretaker": True 
+}
+
+# Define the dependents of the user
+dependents_data = [
+    {
+        "gender": "Male",
+        "citizenship": "US Citizen",
+        "birthdate": "2018-03-20",
+        "state": "Massachusetts",
+        "relationship_to_the_applicant": "Child",
+        "disability_status": False,
+        "pregnancy_status": False
+    }
+]
+
+# Check eligibility
+results = get_household_eligibility(individual_data, dependents_data, total_income=25000)
+print_all(results)
+```
+
+For more detailed examples, see the `example.ipynb` notebook in the repository.
+
+
+## Testing
+
+To run the test suite:
+
+```
+cd /path/to/repo
+```
+```
+pytest tests/
+```
+
+All tests should pass and the tests include unit tests for all the functions in the `Household`, `Individual`, `Person`, `Dependent`, `Condition`, `Plan`
+
+
+## **Contributors:**
+- Danyi Xu
+- Xinxin Zhang
+- Radiah Khan
+
+## Acknowledgments
+
+- Federal Poverty Level data from [HHS.gov](https://aspe.hhs.gov/topics/poverty-economic-mobility/poverty-guidelines)
+- MassHealth program information from [Mass.gov](https://www.mass.gov/masshealth)
+- Developed for SDS 271: Advanced Programming for Data Science at Smith College
+- Special thanks to Professor Gillian Beltz-Mohrmann for all the support!
