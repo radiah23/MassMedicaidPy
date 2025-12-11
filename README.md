@@ -28,6 +28,14 @@ pip install .
 
 ## Package Structure
 
+### Assumptions
+
+- The user using this is a U.S. Citizen/ Permenant Resident and a Massachussetts resident
+- The user using this is an adult according to Massachussetts
+- The age of the user and their dependents have is the year (not calculating for months and days)
+- The dependents of the user live in the same household as the user using this package
+- The dependents of the user have the same citizenship, state as the user
+
 ### 1. Household Information Module
 Defines the main user-facing classes.
 
