@@ -13,18 +13,29 @@ def get_household_eligibility(primary_applicant, dependent_list, total_income):
 
     """
     Check eligibility for the entire household
-    
-    :param primary_applicant: Primary applicant for the household
-    :param dependent_list: Dependent(s) of the household
-    :param total_income: Total household income
-    """
 
+    Flow:
+    1. Create individual object from primary applicant (household) 
+    2. Create a list of dependent objects from dependent_list (household)
+    3. Create Household object including all members and household income
+    4. Use check_household_eligibility in MassHealthEligibility checker 
+        from condition class to validate household basic eligibility 
+    5. Use check_eligibility in MassHealthEligibility checker 
+        from condition class to check individual and dependents' eligibility
+    6. Use plan class to get plans and plan details 
+    
+    primary_applicant: Primary applicant for the household (from Household)
+    dependent_list: Dependent(s) of the household (from Household)
+    total_income: Total household income (from Household)
+    """
+    # Raise error if primary applicant is not a dictionary and dependent is not a list of dictionarie
     if not isinstance(primary_applicant, dict):
         raise TypeError("primary_applicant must be a dictionary")
     if not isinstance(dependent_list, list):
         raise TypeError("dependent_list must be a list of dictionaries")
     
     # Create primary applicant(individual) and dependents objects
+    # Individul() in household class is called
    
     primary = Individual(
         gender=primary_applicant["gender"],
@@ -35,7 +46,7 @@ def get_household_eligibility(primary_applicant, dependent_list, total_income):
         pregnancy_status=primary_applicant["pregnancy_status"],
         is_primary_caretaker=primary_applicant["is_primary_caretaker"]
     )
-
+    # Dependent() in household class is called
     dependents = [
         Dependent(
             gender=dependent["gender"],
@@ -48,7 +59,8 @@ def get_household_eligibility(primary_applicant, dependent_list, total_income):
         )
         for dependent in dependent_list
     ]
-    # Create household object that contains primary and dependent info, as well as total income
+    # Create household object 
+    # Household() from household class is called, matches arguments
     household = Household(
         primary_applicant=primary,
         dependent_list=dependents,
@@ -58,8 +70,8 @@ def get_household_eligibility(primary_applicant, dependent_list, total_income):
     # Call eligibility checker from condition class
     checker = MassHealthEligibilityChecker()
 
-    # Create a results dictionary that contained household info, family size, and total income,
-    #  also a list that contains all the members
+    # Create a results dictionary to store household info: family size, total income,
+    #  and a list that contains all the members
     results = {
             "household_info": {
             "family_size": household.household_size(),
@@ -67,10 +79,10 @@ def get_household_eligibility(primary_applicant, dependent_list, total_income):
             "members": []
         }
     }
-    # First, check the basic eligibilty of the entire household
-    # which is that primary applicant has to meet the residency and citizenship criterias
+    # First, check the basic eligibilty of the entire household by calling check_household_eligibility
+    # This checks primary applicant's regional belonging and citizenship criterias
     household_validation = checker.check_household_eligibility(household)
-    # If not, we will return not eligible and the reason
+    # If not, we will directly return not eligible and the reason
     if not household_validation.get("eligible"):
          return {
               "household_info":{
