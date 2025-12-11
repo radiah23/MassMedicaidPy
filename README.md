@@ -10,63 +10,94 @@ Determining eligibility for public health insurance is often confusing, time-con
 Low-income individuals and families in Massachusetts seeking to understand their Medicaid eligibility.
 
 ## Installation 
+
 #### 1. Clone the repository
+```
 git clone https://github.com/radiah23/MassMedicaidPy.git
+```
 
 #### 2. Navigate into the project directory
+```
 cd /path/to/repo
+```
 
 #### 3. Install the package locally
+```
 pip install .
+```
 
+## Package Structure
 
-
-
-## Package structure
-1. Household Information Module
-
+### 1. Household Information Module
 Defines the main user-facing classes.
-Person
-Base class containing:Gender, Citizenship, Birthdate, State, Age-calculation and demographic helper methods
 
-Individual (Subclass of Person)
-Attributes: Disability status, Pregnancy status, Primary caretaker flag, Back-reference to the household, Dependent (Subclass of Person)
+**Person**
+
+Base class containing:
+- Gender
+- Citizenship
+- Birthdate
+- State
+- Age-calculation and demographic helper methods
+
+**Individual (Subclass of Person)**
+
+Attributes:
+- Disability status
+- Pregnancy status
+- Primary caretaker flag
+- Back-reference to the household
+
+**Dependent (Subclass of Person)**
 
 Dependents (spouse, child, or other related adult).
-Attributes:Relationship to applicant, Optional disability/pregnancy indicators, Back-reference to household
 
-Household
+Attributes:
+- Relationship to applicant
+- Optional disability/pregnancy indicators
+- Back-reference to household
+
+**Household**
+
 Represents a family unit applying for coverage.
-Key functionality: Tracks household size, income, dependents
-Identifies number of children/adults/seniors, Checks special conditions (pregnancy, disability), Connects to eligibility and plan modules, Provides get_eligibility_and_plans() to return unified results
 
-2. Eligibility Module
+Key functionality:
+- Tracks household size, income, dependents
+- Identifies number of children/adults/seniors
+- Checks special conditions (pregnancy, disability)
+- Connects to eligibility and plan modules
+- Provides `get_eligibility_and_plans()` to return unified results
 
+### 2. Eligibility Module
 Contains class:
-MassHealthEligibilityChecker
+
+**MassHealthEligibilityChecker**
 
 This class:
-Stores FPL values
-Computes income thresholds using federal poverty percentages
+- Stores FPL values
+- Computes income thresholds using federal poverty percentages
+- Checks:
+  - Residency in Massachusetts
+  - Citizenship/permanent residency
+  - Child eligibility by age group
+  - Pregnancy eligibility
+  - Parent/caretaker eligibility
+  - Adult expansion eligibility
+- Returns a structured dictionary of eligibility results
 
-Checks:
-Residency in Massachusetts
-Citizenship/permanent residency
-Child eligibility by age group
-Pregnancy eligibility
-Parent/caretaker eligibility
-Adult expansion eligibility
+### 3. Plan Module
 
-Returns a structured dictionary of eligibility results
+**Plan**
 
-3. Plan Module
-Plan
 Maps eligible programs to specific MassHealth plans:
+
 Programs → Plans
-Children’s Medicaid → MassHealth Standard
-CHIP → CHIP
-Adult expansion → MassHealth CarePlus
+- Children's Medicaid → MassHealth Standard
+- CHIP → CHIP
+- Adult expansion → MassHealth CarePlus
 
 Provides:
-Plan descriptions, Coverage details, Copay, premium, and deductible information
-get_summary() method for a full plan overview
+- Plan descriptions
+- Coverage details
+- Copay, premium, and deductible information
+- `get_summary()` method for a full plan overview
