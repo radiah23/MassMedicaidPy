@@ -83,18 +83,18 @@ Relationship to the primary applicant can be only one of these options `spouse, 
 
 **Household**
 
-** Attributes:** 
+**Attributes:** 
 `primary_applicant` - Individual object
 `dependent_list` - List of Dependent objects living in the household
 - `total_income` - Total annual household income in USD
 
-** Functionality:**
+**Functionality:**
 - Connects primary applicant and dependents 
 - Tracks household size, income, and all dependents
 - Identifies number of children/adults/seniors in the household
 - Checks for special conditions (pregnancy, disability) across all memberss
 
-** Methods:**
+**Methods:**
 - `get_income()` - Returns total household income
 - `household_size()` - Returns total number of people in household
 - `dependent_count()` - Returns number of dependents
