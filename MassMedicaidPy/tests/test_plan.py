@@ -52,7 +52,7 @@ def test_get_plan_none():
 
 
 """
-Test get_plan_details
+Test get_plan_details 
 """
 
 def test_plan_details_has_required_keys():
@@ -66,6 +66,12 @@ def test_plan_details_has_required_keys():
     assert "copay" in details
     assert "deductible" in details
 
+def test_get_description():
+    # Test get_description returns string
+    plan = Plan("Medicaid for Pregnant Women")
+    description = plan.get_description()
+    assert isinstance(description, str)
+    assert len(description) > 0
 
 def test_get_coverage():
     # Test get_coverage returns list
@@ -74,17 +80,27 @@ def test_get_coverage():
     assert isinstance(coverage, list)
     assert len(coverage) > 0
 
+def test_get_copay():
+    # Test get_copay returns string
+    plan = Plan("Medicaid for Pregnant Women")
+    copay = plan.get_copay()
+    assert isinstance(copay, str)
+    assert len(copay) > 0
+
 def test_has_premium():
-    # Test has_premium
+    # Test has_premium returns boolean
     plan = Plan("Medicaid for Preganant Women")
     assert plan.has_premium() == False
     plan2 = Plan("Medicaid Expansion for Adults")
     assert plan2.has_premium() == True
 
+
 def test_has_deductible():
-    # Test has_deductible
+    # Test has_deductible returns boolean
     plan = Plan("Medicaid for Pregnant Women")
     assert plan.has_deductible() == False
+    plan2 = Plan("Medicaid Expansion for Adults")
+    assert plan2.has_deductible() == True
 
 def test_get_summary():
     # Test get_summary returns complete plan info
@@ -124,5 +140,6 @@ def test_all_programs_works():
         assert plan.get_plan() is not None
         assert plan.get_plan_details() is not None
         assert plan.get_coverage() is not None
+
 
 

@@ -8,8 +8,8 @@ class Plan:
     ------------------------------------------------------------------------------------------------------------------------------------------
         Attributes:
 
-        program                 Dictionary
-                                The program people are assigned based on their age, pregnancy status, and income
+        program                    String
+                                   The program people are assigned in the previous condition class
    ----------------------------------------------------------------------------------------------------------------------------------------------
     Methods : 
         get_plan(self)             Dictionary
@@ -18,15 +18,27 @@ class Plan:
         get_plan_details(self)     Dictionary
                                    Returns Dictionary containing details
         
-        get_coverage(self)         List 
-                                   Returns a list of coverage
+        get_description(self)      String
+                                   Returns string that describes who the plan is for                          
         
-        has_premium(self)                  Boolean 
-                                        Checks if the person is over 18 and under 65 and returns true if the person is and false otherwise
+        get_coverage(self)         List 
+                                   Returns a list of coverages of the plan
+
+        get_copay(self)            String
+                                   Returns copay informaton of the plan
+        
+        has_premium(self)          Boolean
+                                   Returns whether the plan has premium
+
+        has_deductible(self)       Boolean
+                                   Returns whether the plan has deductible 
+
+        get_summary(self)          Dictionary
+                                   Returns a summary dictionary containing all the information above 
     --------------------------------------------------------------------------------------------------------------------------------------------------
  """    
    
-    # first match programs defined in condition class to plans
+    # First match programs defined in condition class to plans through a dictionary
     program_to_plans = {
         "Children's Medicaid (0-1)": "MassHealth Standard",
         "Children's Medicaid (1-5)": "MassHealth Standard",
@@ -36,7 +48,7 @@ class Plan:
         "Medicaid for Parents/Caretakers": "MassHealth Standard",
         "Medicaid Expansion for Adults": "MassHealth CarePlus",
     }
-    # plan details including description, coverage, copay, premium, and deductible.
+    # Plan details including description, coverage, copay, premium, and deductibles
     plans = {
         "MassHealth Standard": {
             "description": "For children, pregnant women, and parents/caretakers",
@@ -85,15 +97,34 @@ class Plan:
         
         return self.plans.get(plan_name)
     """
+        Get plan's description
+        Return string
+    """
+    
+    def get_description(self):
+        details = self.get_plan_details()
+        return details.get("description") if details else None
+    
+    """
         Get covered services
         Returns a list including all the services covered
     """
     def get_coverage(self):
         details = self.get_plan_details()
         return details.get("coverage") if details else None
+    
     """
-        Get premiums
+        Get copays
         Returns string
+    """
+
+    def get_copay(self):
+        details = self.get_plan_details()
+        return details.get("copay") if details else None
+    
+    """
+        Has premiums
+        Returns boolean
     """
     def has_premium(self):
         details = self.get_plan_details()
@@ -102,8 +133,8 @@ class Plan:
         return "no premium" not in details["premium"].lower()
 
     """
-        Get deductibles
-        Returns string
+        Has deductibles
+        Returns boolean
     """
    
     def has_deductible(self):
