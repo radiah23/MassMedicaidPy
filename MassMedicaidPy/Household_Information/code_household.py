@@ -214,10 +214,7 @@ class Dependent(Person):
 class Household:
     """
     Instantiates a Household object that contains the primary applicant and the dependents with their total income. This is the class that connects Individual and 
-    Dependents and store them in one household. The package does not let someone who is not an adult yet to be a primary applicant, so it will throw a ValueError. 
-    The class stores the primary applicant in the household and runs with the assumption that the dependents live in the same household as well. It does
-    not take into account if the dependents live out of the household. 
-
+    Dependents and store them in one household. 
     ------------------------------------------------------------------------------------------------------------------------------------------
         Attributes:
 
@@ -485,6 +482,10 @@ class Household:
             if dep.pregnancy_status:
                 return True
         return False
+
+
+##Citations for the scope of the class
+## Used Gen AI to debug the error messages, debugging the code at times and understanding logic errors in the code, and structuring the planning better. 
 
 
     
