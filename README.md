@@ -36,22 +36,28 @@ All required modules (`datetime`, `typing`) are included in Python's standard li
 
 ## Package Structure
 
-### Assumptions
+### Assumptions of all the modules
 
-- The user using this is a U.S. Citizen/ Permenant Resident and a Massachussetts resident
-- The user using this is an adult according to Massachussetts otherwise it does not process the results
-- The dependents can be of any age 
-- The age of the user and their dependents have is the year (not calculating for months and days)
-- The dependents of the user needs to live in the same household as the user using this package, error in results otherwise.
-- The dependents of the user have the same citizenship, state as the user
-- Total income must be calculated and provided as total annual household income (users must calculate this themselves)
-- Total yearly income must be in USD 
-- The user is assumed to be the primary caretaker when dependents are present
-- Federal Poverty Level (FPL) data is based on the 2024 guidelines so the threshold might change annually
-- Relationship types for dependents are limited to "Spouse", "Child", or "Adult-Related-Dependent" and it does not account for any other relationship. Throws an error if you try to input any other types.
+- Primary applicant be a U.S. Citizen or Permanent Resident
+- Primary applicant  be a Massachusetts resident
+- Primary applicant  be 19 years or older (adults only) - otherwise the package will not process results
+- Primary applicant is assumed to be the primary caretaker when dependents are present
+- Dependents can be of any age
+- Dependents live in the same household as the primary applicant (error in results otherwise)
+- Dependents have the same citizenship and state as the primary applicant
+- Total income must be calculated and provided as total annual household income in USD
+- Users must calculate their household income themselves before using the package
+- Birthdates must be provided in 'YYYY-MM-DD' format
+- Birthdates cannot be in the future. Throws an error if input by the user.
+- Age calculations are based on years only
+- Gender must be one of: "Male", "Female", or "Prefer not to Disclose"
+- Relationship types for dependents are limited to: "Spouse", "Child", or "Adult-Related-Dependent" (throws an error for other types)
+- Disability and pregnancy status are boolean (True/False) values only
+- Federal Poverty Level (FPL) data is based on 2024 guidelines (thresholds may change annually and require package updates)
 - The package assumes standard MassHealth program categories and does not account for special circumstances or waiver programs
-- Does not provide enrollment assistance or next steps after determining eligibility
-- Gender must be one of the options :  [Male, Female, Prefer not to Disclose] for the sake of the project scope. 
+- Income eligibility is based solely on Federal Poverty Level percentages.
+
+
 
 ### 1. Household Information Module
 Defines the main user-facing classes.
@@ -60,33 +66,47 @@ Defines the main user-facing classes.
 
 Base class contains : `Gender`, `Citizenship`, `Birthdate` `State`
 
+Methods contain :
+
+`calculate_age` : Calculates the person object's age from their birthdate (the year
+`is_child_acc_to_mass`, `is_adult `, `is_senior_acc_to_mass` : All of the methods check if the person object is a child, adult or senior
+
 **Individual (Subclass of Person)**
 
-Attributes:
-- Disability status
-- Pregnancy status
-- Primary caretaker flag
-- Back-reference to the household
+Attributes: `Disability_status`, `pregnancy_status`, `is_primary_caretaker` : All of the attributes have `True/False` boolean values 
+Always assumes they are primary caretaker. 
 
 **Dependent (Subclass of Person)**
 
-Dependents (spouse, child, or other related adult).
-
-Attributes:
-- Relationship to applicant
-- Optional disability/pregnancy indicators
-- Back-reference to household
+Attributes: `Disability_status`, `pregnancy_status`,`Relationship_to_applicant` 
+Relationship to the primary applicant can be only one of these options `spouse, child, or other related adult`
 
 **Household**
 
-Represents a family unit applying for coverage.
+** Attributes:** 
+`primary_applicant` - Individual object
+`dependent_list` - List of Dependent objects living in the household
+- `total_income` - Total annual household income in USD
 
-Key functionality:
-- Tracks household size, income, dependents
-- Identifies number of children/adults/seniors
-- Checks special conditions (pregnancy, disability)
-- Connects to eligibility and plan modules
-- Provides `get_eligibility_and_plans()` to return unified results
+** Functionality:**
+- Connects primary applicant and dependents 
+- Tracks household size, income, and all dependents
+- Identifies number of children/adults/seniors in the household
+- Checks for special conditions (pregnancy, disability) across all memberss
+
+** Methods:**
+- `get_income()` - Returns total household income
+- `household_size()` - Returns total number of people in household
+- `dependent_count()` - Returns number of dependents
+- `get_children()` - Returns number of children (under 19)
+- `get_adults()` - Returns number of adults (19-64)
+- `get_seniors()` - Returns number of seniors (65+)
+- `is_parent()` - Checks if primary applicant has children
+- `has_pregnancy()` - Checks if any household member is pregnant
+- `has_disabled_member()` - Checks if any household member has a disability
+- `has_seniors()` - Checks if household includes seniors
+- `add_dependent()` - Adds a new dependent to the household
+
 
 ### 2. Eligibility Module
 Contains class:
