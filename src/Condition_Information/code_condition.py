@@ -1,5 +1,61 @@
 from Household_Information.code_household import Person, Individual, Household
 class MassHealthEligibilityChecker:
+    """
+------------------------------------------------------------------------------------------------------------------------------------------
+Class: MassHealthEligibilityChecker
+A class used to evaluate MassHealth (Massachusetts Medicaid) eligibility for individuals
+and households based on income, age, pregnancy status, family size, and citizenship.
+
+------------------------------------------------------------------------------------------------------------------------------------------
+Attributes:
+
+annual_fpl                 Dictionary
+                           Stores the Federal Poverty Level (FPL) annual income thresholds for
+                           family sizes 1 to 8. Used as base income benchmarks.
+
+additional_person_annual   Integer
+                           Additional FPL amount added for each family member above size 8.
+
+eligibility_standards      Dictionary
+                           Defines FPL percentage thresholds for different eligibility categories,
+                           such as children, parents, pregnant women, and expansion adults.
+
+------------------------------------------------------------------------------------------------------------------------------------------
+Methods:
+
+regional_belonging(person)                 String
+                                           Returns the state belonging of the person or a message
+                                           directing them to other insurance options.
+
+citizenship_eligibility(person)            String
+                                           Returns citizenship eligibility status or alternative
+                                           suggestions for non-eligible categories.
+
+calculate_annual_fpl(family_size)          Integer
+                                           Computes the Federal Poverty Level amount for a given
+                                           family size.
+
+get_annual_income_limit(category,
+                        family_size)       Float
+                                           Returns the income limit (FPL * percentage) for a
+                                           specific eligibility category.
+
+check_eligibility(age,
+                  annual_income,
+                  family_size,
+                  is_pregnant=False,
+                  is_parent=False)         Dictionary
+                                           Evaluates an individual's eligibility across all MassHealth
+                                           categories and returns a detailed result dictionary.
+
+check_household_eligibility(household)     Dictionary
+                                           Evaluates whether a household meets the basic state and
+                                           citizenship requirements before checking member-level
+                                           eligibility.
+
+------------------------------------------------------------------------------------------------------------------------------------------
+"""
+
     def __init__(self):
        #yearly federal poverty level  - yearly income
        self.annual_fpl = {
@@ -28,6 +84,16 @@ class MassHealthEligibilityChecker:
        }
 #Here it was saying self but it should access person. bevause it is accessing the person objects 
     def regional_belonging(self, person:Person):#Person object
+       """
+    Determine whether the person resides in Massachusetts.
+
+    Parameters:
+        person (Person): A Person object containing demographic attributes.
+
+    Returns:
+        String indicating Massachusetts residency, or guidance to seek other
+        state or federal insurance options.
+    """
        if person.state == "Massachusetts":
            return person.state
        else:
@@ -35,6 +101,17 @@ class MassHealthEligibilityChecker:
 
 
     def citizenship_eligibility(self,person):
+        """
+    Check the person's citizenship status for MassHealth eligibility.
+
+    Parameters:
+        person (Person): A Person object with a citizenship attribute.
+
+    Returns:
+        String representing valid citizenship status for MassHealth
+        ("US Citizen" or "Permanent Residency"), or a message directing
+        non-eligible individuals to alternative options.
+        """
         if person.citizenship == "US Citizen":
             return person.citizenship
         elif person.citizenship == "Permanent Residency":
