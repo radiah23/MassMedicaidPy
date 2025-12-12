@@ -150,6 +150,31 @@ Provides:
 - Copay, premium, and deductible information
 - `get_summary()` method for a full plan overview
 
+### 4. Result Module
+This module:
+- combines functions from household, condition, and plan class
+- check eligibility and generate specific plan information for the entire household, including primary applicant and dependents.
+
+**Args:**
+- `primary_applicant` - Primary applicant for the household
+- `dependent_list` - Dependent(s) of the household
+- `total_income` - Total household income 
+
+**Flow:**
+   
+    1. Create individual object from dictionary of primary applicant 
+    
+    2. Create a list of dependent objects from dictionaries of dependents
+   
+    3. Create Household object including all members and household income
+   
+    4. Use check_household_eligibility in MassHealthEligibility checker 
+        from condition module to validate household basic eligibility 
+    
+    5. Use check_eligibility in MassHealthEligibility checker 
+        from condition module to check individual and dependents' eligibility separately
+    
+    6. Use plan class to get plans and plan details 
 
 ## Example Usage
 
