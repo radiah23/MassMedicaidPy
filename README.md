@@ -28,10 +28,18 @@ pip install .
 
 ## Dependencies of the Package 
 
-This package requires:
 - Python >= 3.9 version
-- No external dependencies are needed (We use the standard library of python) 
-All required modules (`datetime`, `typing`) are included in Python's standard library.
+- Dependencies:
+-  `sys` : System library
+-   `os` : Operations system library
+-   `datetime`: For creating datetime object to calculate age later
+-   `typing` : Type hinting 
+-   `unittest` : For the testing module
+-   `__future__.annotations` : For python compatibility 
+  
+  
+
+
 
 
 ## Package Structure
