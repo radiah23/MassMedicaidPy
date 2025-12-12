@@ -84,8 +84,8 @@ Relationship to the primary applicant can be only one of these options `spouse, 
 **Household**
 
 **Attributes:** 
-`primary_applicant` - Individual object
-`dependent_list` - List of Dependent objects living in the household
+- `primary_applicant` - Individual object
+- `dependent_list` - List of Dependent objects living in the household
 - `total_income` - Total annual household income in USD
 
 **Functionality:**
