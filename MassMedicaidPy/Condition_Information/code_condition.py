@@ -81,8 +81,8 @@ check_household_eligibility(household)     Dictionary
            'parents': 1.33,          
            'expansion_adults': 1.33  
        }
-#Here it was saying self but it should access person. bevause it is accessing the person objects 
-    def regional_belonging(self, person:Person):#Person object
+
+    def regional_belonging(self, person:Person):
        if person.state == "Massachusetts":
            return person.state
        else:
@@ -102,7 +102,7 @@ check_household_eligibility(household)     Dictionary
        """Calculate the Federal Poverty Level (annual income) for a given family size
            and return the annual FPL amount."""
        if family_size <= 0:
-           return ValueError #Fixed here because I think it should be atleast 1 person who is applying - Radiah
+           return ValueError 
       
        if family_size <= 8:
            return self.annual_fpl[family_size]
@@ -114,7 +114,7 @@ check_household_eligibility(household)     Dictionary
            and return the limit amount."""
        percentage = self.eligibility_standards.get(category)
        if percentage is None:
-           return ValueError #invalid ???? or return as error ??????? #But ask again
+           return ValueError 
       
        fpl = self.calculate_annual_fpl(family_size)
        return fpl * percentage
@@ -220,7 +220,3 @@ check_household_eligibility(household)     Dictionary
         
         return {"eligible": True}
    
-#Fixes: connected th classes in a way that it doesnt duplicated
-#specifically in the return function 
-#Fixed the is_parent with() by calling the method DIRECTLYYYY
-
