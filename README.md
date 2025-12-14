@@ -118,7 +118,7 @@ Relationship to the primary applicant can be only one of these options `spouse, 
 
 ### 2. Eligibility Module
 Contains class:
-
+The `MassHealthEligibilityChecker` class evaluates MassHealth and CHIP eligibility based on household characteristics and income relative to the Federal Poverty Level (FPL).
 **MassHealthEligibilityChecker**
 
 This class:
@@ -132,6 +132,33 @@ This class:
   - Parent/caretaker eligibility
   - Adult expansion eligibility
 - Returns a structured dictionary of eligibility results
+
+**Attributes:**
+- `annual_fpl`
+- A dictionary mapping household size to the annual Federal Poverty Level (FPL) income thresholds.
+
+**Function:**
+-`check_eligibility(age, annual_income, family_size, is_pregnant=False, is_disabled=False)`:
+  - Determines MassHealth or CHIP eligibility based on the applicant’s age, income, household size, pregnancy status, and disability status.
+- Returns a dictionary containing:
+  - Eligibility status (eligible)
+  - Program type (MassHealth, CHIP, or Not Eligible)
+  - Household income limit
+  - Current household income
+  - Federal Poverty Level (FPL) percentage
+  - Household size
+  - CHIP indicator (True / False)
+
+- `calculate_fpl_percentage(annual_income, family_size)`:
+  - Calculates household income as a percentage of the Federal Poverty Level based on family size.
+- `get_income_limit(family_size)`:
+  - Returns the annual income limit corresponding to the given household size.
+- `is_child(age)`:
+  - Checks whether the applicant qualifies as a child under MassHealth age guidelines.
+- `is_adult(age)`:
+  - Checks whether the applicant qualifies as an adult under MassHealth age guidelines.
+- `is_senior(age)`:
+  - Checks whether the applicant qualifies as a senior (65+) under MassHealth guidelines.
 
 ### 3. Plan Module
 
