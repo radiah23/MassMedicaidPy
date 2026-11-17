@@ -1,4 +1,13 @@
 # MassMedicaidPy
+
+**A Python package that checks MassHealth (Massachusetts Medicaid) eligibility for a household and returns the plans each member may qualify for.**
+
+![Python](https://img.shields.io/badge/Python-3.9%2B-3776AB?logo=python&logoColor=white)
+![Tests](https://img.shields.io/badge/tests-unittest%20%7C%20pytest-blue)
+![License: MIT](https://img.shields.io/badge/license-MIT-green)
+
+Built by Radiah Khan, Danyi Xu and Xinxin Zhang for SDS 271 (Advanced Programming for Data Science) at Smith College.
+
 ## Description 
 MassMedicaidPy is a Python package that calculates Medicaid eligibility and possible health insurance plans for residents of Massachusetts. It evaluates demographic information, family structure, income, pregnancy status, disability, and other factors to determine the user's eligibility for various MassHealth programs.
 
@@ -17,7 +26,7 @@ git clone https://github.com/radiah23/MassMedicaidPy.git
 
 #### 2. Navigate into the project directory
 ```
-cd /path/to/repo
+cd MassMedicaidPy
 ```
 
 #### 3. Install the package locally
@@ -26,21 +35,10 @@ pip install .
 ```
 
 
-## Dependencies of the Package 
+## Dependencies
 
-- Python >= 3.9 version
-- Dependencies:
--  `sys` : System library
--   `os` : Operations system library
--   `datetime`: For creating datetime object to calculate age later
--   `typing` : Type hinting 
--   `unittest` : For the testing module
--   `__future__.annotations` : For python compatibility 
-  
-  
-
-
-
+- Python 3.9 or newer
+- **No third-party packages.** The package uses only the Python standard library (`datetime`, `typing`, `os`, `sys`), and its tests use `unittest` (pytest also collects the function-style tests).
 
 ## Package Structure
 
@@ -247,16 +245,15 @@ For more detailed examples, see the `example.ipynb` notebook in the repository.
 
 ## Testing
 
-To run the test suite:
+To run the test suite from the repository root:
 
 ```
-cd /path/to/repo
-```
-```
-pytest tests/
+python -m pytest MassMedicaidPy/tests
+# or run only the unittest-style tests:
+python -m unittest discover MassMedicaidPy/tests
 ```
 
-All tests should pass and the tests include unit tests for all the functions in the `Household`, `Individual`, `Person`, `Dependent`, `Condition`, `Plan`
+All 59 tests pass (pytest). They include unit tests for all the functions in the `Household`, `Individual`, `Person`, `Dependent`, `Condition`, `Plan`
 
 
 ## **Contributors:**
